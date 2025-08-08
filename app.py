@@ -78,3 +78,13 @@ for idx, row in df.iterrows():
         st.markdown(f"**🎯 Purpose:** {row['Purpose']}")
 
     st.markdown("---")
+
+st.sidebar.markdown("💰 **Support the GeoAI Repository**")
+st.sidebar.markdown("If you find this helpful, consider supporting the project!")
+
+# UPI/Payment Link
+st.sidebar.markdown("[📲 Donate via UPI](upi://pay?pa=yourupi@upi&pn=YourName)", unsafe_allow_html=True)
+
+# OR a QR code image (hosted or local)
+st.sidebar.image("images/qr-code.png", caption="Scan to Pay (UPI / PayTM / GPay)", use_column_width=True)
+
