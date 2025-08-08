@@ -1,32 +1,3 @@
-import streamlit as st
-import pandas as pd
-import streamlit_authenticator as stauth
-
-# --- User credentials ---
-names = ["Shubh"]
-usernames = ["shubh"]
-passwords = ["test123"]  # plain passwords
-
-# --- Hash the passwords ---
-hashed_passwords = stauth.Hasher(passwords).generate()
-
-# --- Authenticator setup ---
-authenticator = stauth.Authenticate(
-    names,
-    usernames,
-    hashed_passwords,
-    "geoai_dashboard",  # cookie name
-    "abcdef",            # cookie key
-    cookie_expiry_days=1
-)
-
-name, authentication_status, username = authenticator.login("Login", "main")
-
-# --- If login is successful ---
-if authentication_status:
-    authenticator.logout("Logout", "sidebar")
-    st.sidebar.success(f"Welcome, {name} 👋")
-
     # --- Load Excel ---
     @st.cache_data
     def load_data(sheet_name):
