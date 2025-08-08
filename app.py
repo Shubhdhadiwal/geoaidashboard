@@ -16,7 +16,7 @@ def load_data(sheet_name):
 # ----- Sidebar Navigation ----- #
 st.sidebar.header("🧭 GeoAI Repository")
 
-# Custom tab order: About first, then categories, then submission
+# Custom tab order
 sheet_options = {
     "About": "About",
     "Data Sources": "Data Sources",
@@ -28,20 +28,18 @@ sheet_options = {
 }
 selected_tab = st.sidebar.radio("Select Section", list(sheet_options.keys()))
 
-# ----- UPI Donation Section ----- #
+# ----- UPI Donation Section (Sidebar) ----- #
 st.sidebar.markdown("---")
 st.sidebar.markdown("💖 **Support This Project**")
-
 try:
     st.sidebar.image("upi_qr.png", caption="📱 Scan QR to Contribute", use_container_width=True)
 except:
     st.sidebar.warning("⚠️ UPI QR image not found. Please add `upi_qr.png` to your folder.")
-
 st.sidebar.markdown("🙏 Thank you for your support!")
 
 # ----- Footer (Sidebar) ----- #
 st.sidebar.markdown("---")
-st.sidebar.markdown("© 2025 GeoAI Repository  \nCreated by [Your Name]")
+st.sidebar.markdown("© 2025 GeoAI Repository  \nCreated by [Shubham Dhadiwal](mailto:dhadiwalshubh348@gmail.com)")
 
 # ========================= #
 #       ABOUT SECTION       #
@@ -69,8 +67,7 @@ if selected_tab == "About":
     """)
 
     st.subheader("📬 Contact / Feedback")
-    st.markdown("📧 Reach out at: [your.email@example.com](mailto:your.email@example.com)")
-
+    st.markdown("📧 Reach out at: [dhadiwalshubh348@gmail.com](mailto:dhadiwalshubh348@gmail.com)")
     st.stop()
 
 # ========================= #
@@ -84,7 +81,7 @@ if selected_tab == "Submit New Resource":
         title = st.text_input("📌 Title")
         description = st.text_area("📝 Description")
         link = st.text_input("🔗 Link")
-        category = st.selectbox("📁 Category", list(sheet_options.keys())[1:-1])  # Skip About & Submit tabs
+        category = st.selectbox("📁 Category", list(sheet_options.keys())[1:-1])  # Skip About & Submit
         resource_type = st.text_input("📂 Type (e.g. Satellite, Tool, Course)")
         purpose = st.text_input("🎯 Purpose or Use Case")
 
@@ -153,12 +150,14 @@ for idx, row in df.iterrows():
         if pd.notna(row.get("Datasets Availability")):
             st.markdown(f"**📊 Datasets Availability:** {row['Datasets Availability']}")
 
-    # Common field
+    # Common Purpose field
     if pd.notna(row.get("Purpose")):
         st.markdown(f"**🎯 Purpose:** {row['Purpose']}")
 
     st.markdown("---")
 
-# ----- Footer ----- #
+# ========================= #
+#           FOOTER          #
+# ========================= #
 st.markdown("<hr style='border:1px solid #ddd'/>", unsafe_allow_html=True)
 st.markdown("📘 Powered by [Streamlit](https://streamlit.io) | © 2025 GeoAI Repository")
