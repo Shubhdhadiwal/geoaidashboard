@@ -33,7 +33,6 @@ st.sidebar.markdown("---")
 st.sidebar.markdown(
     """
     © 2025 GeoAI Repository  
-    **Created by:** Shubh Dhadiwal  
     📧 [dhadiwalshubh348@gmail.com](mailto:dhadiwalshubh348@gmail.com)
     """
 )
@@ -160,7 +159,6 @@ st.markdown("<hr style='border:1px solid #ddd'/>", unsafe_allow_html=True)
 st.markdown(
     """
     📘 Powered by [Streamlit](https://streamlit.io) | © 2025 GeoAI Repository  
-    **Created by:** Shubh Dhadiwal  
     📧 [dhadiwalshubh348@gmail.com](mailto:dhadiwalshubh348@gmail.com)
     """
 )
