@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 
+# ----- Page Configuration ----- #
 st.set_page_config(page_title="GeoAI Repository", layout="wide")
 
 # ----- Load Excel Data ----- #
@@ -14,22 +15,24 @@ def load_data(sheet_name):
 
 # ----- Sidebar Navigation ----- #
 st.sidebar.header("🧭 GeoAI Repository")
+
+# Custom tab order: About first, then categories, then submission
 sheet_options = {
+    "About": "About",
     "Data Sources": "Data Sources",
     "Tools": "Tools",
     "Free Tutorials": "Free Tutorials",
     "Python Codes (GEE)": "Google Earth EnginePython Codes",
     "Courses": "Courses",
-    "Submit New Resource": "Submit New Resource",
-    "About": "About"
+    "Submit New Resource": "Submit New Resource"
 }
-selected_tab = st.sidebar.radio("Select Category", list(sheet_options.keys()))
+selected_tab = st.sidebar.radio("Select Section", list(sheet_options.keys()))
 
 # ----- UPI Donation Section (Sidebar) ----- #
 st.sidebar.markdown("---")
 st.sidebar.markdown("💖 **Support This Project**")
 try:
-    st.sidebar.image("upi_qr.png", caption="UPI: yourname@upi", use_container_width=True)
+    st.sidebar.image("upi_qr.png", caption="📱 Scan QR to Contribute", use_column_width=True)
 except:
     st.sidebar.warning("UPI QR image not found. Please add 'upi_qr.png' to your folder.")
 st.sidebar.markdown("🙏 Thank you for your support!")
@@ -38,20 +41,20 @@ st.sidebar.markdown("🙏 Thank you for your support!")
 st.sidebar.markdown("---")
 st.sidebar.markdown("© 2025 GeoAI Repository\nCreated by [Your Name]")
 
-# ----- About Tab ----- #
+# ----- About Section ----- #
 if selected_tab == "About":
     st.title("📘 About GeoAI Repository")
     st.markdown("""
-        The **GeoAI Repository** is a free and open resource hub for students, researchers, and professionals 
-        working in geospatial analytics, machine learning, and urban/climate planning.
+    The **GeoAI Repository** is a free and open resource hub for students, researchers, and professionals 
+    working in geospatial analytics, machine learning, and urban/climate planning.
 
-        This repository curates:
-        - 🌐 **Public geospatial datasets**
-        - 🛠️ **Open-source tools and platforms**
-        - 📘 **Free learning tutorials**
-        - 💻 **Python codes (especially for Google Earth Engine)**
-        
-        Our goal is to foster inclusive learning, open innovation, and rapid knowledge sharing in the geospatial-AI community.
+    This repository curates:
+    - 🌐 **Public geospatial datasets**
+    - 🛠️ **Open-source tools and platforms**
+    - 📘 **Free learning tutorials**
+    - 💻 **Python codes (especially for Google Earth Engine)**
+    
+    Our goal is to foster inclusive learning, open innovation, and rapid knowledge sharing in the geospatial-AI community.
     """)
     st.subheader("💡 Vision")
     st.markdown("- Democratize access to GeoAI tools and knowledge\n- Promote open science and reproducibility\n- Connect learners with meaningful resources")
@@ -60,7 +63,7 @@ if selected_tab == "About":
     st.markdown("📧 Reach out at: [your.email@example.com](mailto:your.email@example.com)")
     st.stop()
 
-# ----- Submit New Resource Tab ----- #
+# ----- Submission Form Section ----- #
 if selected_tab == "Submit New Resource":
     st.title("📤 Submit a New Resource")
     st.markdown("Help us grow this repository by contributing useful links and resources.")
@@ -69,15 +72,17 @@ if selected_tab == "Submit New Resource":
         title = st.text_input("📌 Title")
         description = st.text_area("📝 Description")
         link = st.text_input("🔗 Link")
-        category = st.selectbox("📁 Category", list(sheet_options.keys())[:-2])
+        category = st.selectbox("📁 Category", list(sheet_options.keys())[1:-1])  # Exclude About & Submit New
         resource_type = st.text_input("📂 Type (e.g. Satellite, Tool, Course)")
         purpose = st.text_input("🎯 Purpose or Use Case")
 
         submitted = st.form_submit_button("Submit")
 
         if submitted:
-            st.success("✅ Thank you! Your resource has been submitted for review.")
-            st.markdown("We will verify and add it to the repository soon.")
+            if title and description and link:
+                st.success("✅ Thank you! Your resource has been submitted for review.")
+            else:
+                st.error("⚠️ Please fill out all required fields.")
     st.stop()
 
 # ----- Load Selected Sheet Data ----- #
@@ -139,4 +144,3 @@ for idx, row in df.iterrows():
 # ----- Footer ----- #
 st.markdown("<hr style='border:1px solid #ddd'/>", unsafe_allow_html=True)
 st.markdown("📘 Powered by [Streamlit](https://streamlit.io) | © 2025 GeoAI Repository")
-
