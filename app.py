@@ -17,8 +17,7 @@ sheet_options = {
     "Free Tutorials": "Free Tutorials",
     "Python Codes (GEE)": "Google Earth EnginePython Codes",
     "Courses": "Courses",
-    "Challenges": "Challenges"
-}
+   }
 
 selected_tab = st.sidebar.radio("Select Category", list(sheet_options.keys()))
 
