@@ -18,30 +18,47 @@ This open repository is designed for:
 📬 You can also contribute by suggesting new resources or supporting this project via UPI.
 """)
 
+# ---------- UPI Support (Sidebar) ---------- #
+st.sidebar.header("🙏 Support the GeoAI Repository")
+st.sidebar.markdown("""
+If this platform has helped you, consider supporting us.  
+Every small contribution helps in maintaining and expanding the repository!
+
+📌 **UPI ID:** `your-upi-id@upi`  
+Or scan the QR code below:
+""")
+
+try:
+    st.sidebar.image("images/your_upi_qr.png", caption="Scan to Pay via UPI", use_container_width=True)
+except Exception:
+    st.sidebar.warning("⚠️ QR Code image not found. Please ensure 'images/your_upi_qr.png' exists.")
+
 # ---------- Resource Table ---------- #
 st.subheader("🗂️ Available GeoAI Resources")
 
+# ---- Sample Data ---- #
 data = {
-    "Name": [
+    "Data Source": [
         "Sentinel-2 Imagery", 
         "MODIS Land Surface Temperature", 
-        "OpenStreetMap Buildings", 
-        "Google Earth Engine"
+        "OpenStreetMap Buildings"
     ],
     "Link": [
         "https://sentinel.esa.int/web/sentinel/missions/sentinel-2",
         "https://modis.gsfc.nasa.gov/data/dataprod/mod11.php",
-        "https://www.openstreetmap.org",
-        "https://earthengine.google.com/"
+        "https://www.openstreetmap.org"
     ],
     "Type": [
         "Satellite Imagery", 
         "Temperature (Raster)", 
-        "Vector Data", 
-        "Cloud Platform"
-    ]
+        "Vector Data"
+    ],
+    "Spatial Resolution": ["10m", "1km", "Varies"],
+    "Version": ["2A", "v6", "Latest"],
+    "Purpose": ["Land cover, NDVI", "Thermal analysis", "Urban mapping"]
 }
 df = pd.DataFrame(data)
+
 st.dataframe(df, use_container_width=True)
 
 # ---------- Submission Form ---------- #
@@ -59,21 +76,40 @@ with st.form("submission_form"):
     if submit:
         st.success(f"✅ Thank you for suggesting: {name}")
 
-# ---------- UPI Support (Sidebar) ---------- #
-st.sidebar.header("🙏 Support the GeoAI Repository")
-st.sidebar.markdown("""
-If this platform has helped you, consider supporting us.  
-Every small contribution helps in maintaining and expanding the repository!
+# ---------- Detailed Display View ---------- #
+st.subheader("🔍 Resource Details")
 
-📌 **UPI ID:** `your-upi-id@upi`  
-Or scan the QR code below:
-""")
+for idx, row in df.iterrows():
+    # Title fallback
+    title = row.get("Data Source") or row.get("Tools") or row.get("Title") or row.get("Tutorials") or "Unnamed"
+    st.markdown(f"### 🔹 {title}")
 
-try:
-    st.sidebar.image("images/your_upi_qr.png", caption="Scan to Pay via UPI", use_container_width=True)
-except Exception as e:
-    st.sidebar.warning("⚠️ QR Code image not found. Please ensure 'images/your_upi_qr.png' exists.")
+    # Description
+    if "Description" in row and pd.notna(row["Description"]):
+        st.write(row["Description"])
+
+    # Clickable Link
+    link = row.get("Links") or row.get("Link") or row.get("Link to the codes")
+    if pd.notna(link):
+        st.markdown(f"[🔗 Access Link]({link})", unsafe_allow_html=True)
+
+    # ----- Custom Fields ----- #
+    if "Type" in row and pd.notna(row["Type"]):
+        st.markdown(f"**📂 Type:** {row['Type']}")
+    if "Spatial Resolution" in row and pd.notna(row.get("Spatial Resolution")):
+        st.markdown(f"**📏 Spatial Resolution:** {row['Spatial Resolution']}")
+    if "Version" in row and pd.notna(row.get("Version")):
+        st.markdown(f"**🧾 Version:** {row['Version']}")
+    if "Applicability" in row and pd.notna(row.get("Applicability")):
+        st.markdown(f"**🛠️ Applicability:** {row['Applicability']}")
+    if "Datasets Availability" in row and pd.notna(row.get("Datasets Availability")):
+        st.markdown(f"**📊 Datasets Availability:** {row['Datasets Availability']}")
+    if "Year/Month of Data Availability" in row and pd.notna(row.get("Year/Month of Data Availability")):
+        st.markdown(f"**📅 Year/Month:** {row['Year/Month of Data Availability']}")
+    if "Purpose" in row and pd.notna(row["Purpose"]):
+        st.markdown(f"**🎯 Purpose:** {row['Purpose']}")
+
+    st.markdown("---")
 
 # ---------- Footer ---------- #
-st.markdown("---")
 st.markdown("© 2025 **GeoAI Repository** | Built with ❤️ using [Streamlit](https://streamlit.io)")
