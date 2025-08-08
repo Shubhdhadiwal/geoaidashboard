@@ -111,5 +111,46 @@ for idx, row in df.iterrows():
 
     st.markdown("---")
 
+# ----- Display Data ----- #
+for idx, row in df.iterrows():
+    # Identify title dynamically
+    title = row.get("Data Source") or row.get("Tools") or row.get("Title") or row.get("Tutorials") or "Unnamed"
+    st.subheader(f"🔹 {title}")
+
+    # Description
+    if "Description" in row and pd.notna(row["Description"]):
+        st.write(row["Description"])
+
+    # Clickable link
+    link = row.get("Links") or row.get("Link") or row.get("Link to the codes")
+    if pd.notna(link):
+        st.markdown(f"[🔗 Access Link]({link})", unsafe_allow_html=True)
+
+    # ----- Custom Fields Based on Tab ----- #
+    if selected_tab == "Data Sources":
+        if "Type" in row and pd.notna(row["Type"]):
+            st.markdown(f"**📂 Type:** {row['Type']}")
+        if "Spatial Resolution" in row and pd.notna(row["Spatial Resolution"]):
+            st.markdown(f"**📏 Spatial Resolution:** {row['Spatial Resolution']}")
+        if "Version" in row and pd.notna(row["Version"]):
+            st.markdown(f"**🧾 Version:** {row['Version']}")
+        if "Year/Month of Data Availability" in row and pd.notna(row["Year/Month of Data Availability"]):
+            st.markdown(f"**📅 Year/Month:** {row['Year/Month of Data Availability']}")
+
+    elif selected_tab == "Tools":
+        if "Applicability" in row and pd.notna(row["Applicability"]):
+            st.markdown(f"**🛠️ Applicability:** {row['Applicability']}")
+        if "Type" in row and pd.notna(row["Type"]):
+            st.markdown(f"**📂 Type:** {row['Type']}")
+        if "Datasets Availability" in row and pd.notna(row["Datasets Availability"]):
+            st.markdown(f"**📊 Datasets Availability:** {row['Datasets Availability']}")
+
+    # Purpose (shown for any tab that has it)
+    if "Purpose" in row and pd.notna(row["Purpose"]):
+        st.markdown(f"**🎯 Purpose:** {row['Purpose']}")
+
+    st.markdown("---")
+
+
 # ---------- Footer ---------- #
 st.markdown("© 2025 **GeoAI Repository** | Built with ❤️ using [Streamlit](https://streamlit.io)")
