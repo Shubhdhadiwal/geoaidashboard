@@ -34,12 +34,12 @@ st.sidebar.markdown("💖 **Support This Project**")
 try:
     st.sidebar.image("upi_qr.png.jpg", caption="📱 Scan QR to Contribute", use_container_width=True)
 except:
-    st.sidebar.warning("⚠️ UPI QR image not found. Please add `upi_qr.png` to your folder.")
+    st.sidebar.warning("⚠️ UPI QR image not found. Please add `upi_qr.png.jpg` to your folder.")
 st.sidebar.markdown("🙏 Thank you for your support!")
 
 # ----- Footer (Sidebar) ----- #
 st.sidebar.markdown("---")
-st.sidebar.markdown("© 2025 GeoAI Repository  \nCreated by [Shubh Dhadiwal](mailto:dhadiwalshubh348@gmail.com)")
+st.sidebar.markdown("© 2025 GeoAI Repository  \Created by [Shubh Dhadiwal](mailto:dhadiwalshubh348@gmail.com)")
 
 # ========================= #
 #       ABOUT SECTION       #
