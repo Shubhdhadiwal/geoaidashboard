@@ -36,12 +36,49 @@ if selected_tab == "Data Sources":
     if type_filter:
         df = df[df["Type"].isin(type_filter)]
 
+# ----- Sidebar Support Section -----
+st.sidebar.markdown("---")
+st.sidebar.markdown("💰 **Support the GeoAI Repository**")
+st.sidebar.markdown("If you find this helpful, consider supporting the project!")
+st.sidebar.markdown("**📧 UPI ID:** `yourupi@upi`")
+st.sidebar.markdown("[📲 Pay via UPI](upi://pay?pa=yourupi@upi&pn=YourName)", unsafe_allow_html=True)
+st.sidebar.image("images/your_upi_qr.png", caption="Scan to Pay via UPI", use_column_width=True)
+
+# ----- About Section -----
+with st.expander("ℹ️ About the GeoAI Repository", expanded=True):
+    st.markdown("""
+    The **GeoAI Repository** is a curated, open-access platform designed to support researchers, students, professionals, and enthusiasts working at the intersection of **Geospatial Technologies** and **Artificial Intelligence (AI)**.
+
+    ### 🚀 What You’ll Find Here
+
+    - ✅ High-quality **open geospatial datasets**  
+    - 🛠️ AI-powered and geospatial **tools and platforms**  
+    - 📚 Free **tutorials**, **courses**, and **sample code** (e.g., in Google Earth Engine, Python)  
+    - 🔎 A searchable and categorized **resource hub** to save your time and accelerate your work  
+
+    Whether you're building urban analytics tools, mapping climate impacts, monitoring biodiversity, or exploring satellite imagery, this repository is built to empower your journey with **practical and trustworthy GeoAI resources**.
+
+    ### 🙌 Why Support This Project?
+
+    This repository is a passion-driven, community-centered initiative — maintained without external funding.
+
+    If you find this resource useful, your support will help us:
+
+    - Continuously add and validate new tools, datasets, and examples  
+    - Improve usability and structure of the platform  
+    - Keep the repository **free and open to all**
+
+    ---  
+    **📧 UPI ID**: `yourupi@upi`  
+    [📲 Click here to contribute via UPI](upi://pay?pa=yourupi@upi&pn=YourName)  
+    _or scan the QR code on the left sidebar_
+    """)
+
 # ----- Main Title -----
 st.title(f"🌍 GeoAI Repository – {selected_tab}")
 
 # ----- Display Data -----
 for idx, row in df.iterrows():
-    # Title detection
     title = row.get("Data Source") or row.get("Tools") or row.get("Title") or row.get("Tutorials") or "Unnamed"
     st.subheader(f"🔹 {title}")
 
@@ -54,7 +91,7 @@ for idx, row in df.iterrows():
     if pd.notna(link):
         st.markdown(f"[🔗 Access Link]({link})", unsafe_allow_html=True)
 
-    # Conditional Fields
+    # Tab-specific metadata
     if selected_tab == "Data Sources":
         if "Type" in row and pd.notna(row["Type"]):
             st.markdown(f"**📂 Type:** {row['Type']}")
@@ -73,18 +110,8 @@ for idx, row in df.iterrows():
         if "Datasets Availability" in row and pd.notna(row["Datasets Availability"]):
             st.markdown(f"**📊 Datasets Availability:** {row['Datasets Availability']}")
 
-    # Common Purpose Field
+    # Common field
     if "Purpose" in row and pd.notna(row["Purpose"]):
         st.markdown(f"**🎯 Purpose:** {row['Purpose']}")
 
     st.markdown("---")
-
-st.sidebar.markdown("💰 **Support the GeoAI Repository**")
-st.sidebar.markdown("If you find this helpful, consider supporting the project!")
-
-# UPI/Payment Link
-st.sidebar.markdown("[📲 Donate via UPI](upi://pay?pa=yourupi@upi&pn=YourName)", unsafe_allow_html=True)
-
-# OR a QR code image (hosted or local)
-st.sidebar.image("images/qr-code.png", caption="Scan to Pay (UPI / PayTM / GPay)", use_column_width=True)
-
