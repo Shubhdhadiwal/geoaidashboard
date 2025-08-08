@@ -1,117 +1,79 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title="GeoAI Repository", layout="wide")
+# ---------- Page Configuration ---------- #
+st.set_page_config(page_title="🌍 GeoAI Repository", layout="wide")
 
-# ----- Load Excel -----
-@st.cache_data
-def load_data(sheet_name):
-    df = pd.read_excel("Geospatial Data Repository (1).xlsx", sheet_name=sheet_name)
-    df.columns = df.iloc[0]  # Use first row as headers
-    df = df[1:]  # Skip the header row
-    df = df.dropna(subset=[df.columns[0]])  # Drop empty rows
-    return df
+# ---------- Title & Introduction ---------- #
+st.title("🌍 GeoAI Repository")
+st.markdown("""
+Welcome to the **GeoAI Repository** — your one-stop destination for curated datasets, tools, and platforms 
+at the intersection of **Geospatial Technology** and **Artificial Intelligence (AI)**.
 
-# ----- Sidebar Navigation -----
-st.sidebar.header("🧭 GeoAI Repository")
-sheet_options = {
-    "Data Sources": "Data Sources",
-    "Tools": "Tools",
-    "Free Tutorials": "Free Tutorials",
-    "Python Codes (GEE)": "Google Earth EnginePython Codes",
-    "Courses": "Courses",
+This open repository is designed for:
+- Researchers and students looking for reliable geospatial datasets
+- AI enthusiasts exploring spatial ML/DL applications
+- Policy makers and planners integrating spatial insights in decision-making
+
+📬 You can also contribute by suggesting new resources or supporting this project via UPI.
+""")
+
+# ---------- Resource Table ---------- #
+st.subheader("🗂️ Available GeoAI Resources")
+
+data = {
+    "Name": [
+        "Sentinel-2 Imagery", 
+        "MODIS Land Surface Temperature", 
+        "OpenStreetMap Buildings", 
+        "Google Earth Engine"
+    ],
+    "Link": [
+        "https://sentinel.esa.int/web/sentinel/missions/sentinel-2",
+        "https://modis.gsfc.nasa.gov/data/dataprod/mod11.php",
+        "https://www.openstreetmap.org",
+        "https://earthengine.google.com/"
+    ],
+    "Type": [
+        "Satellite Imagery", 
+        "Temperature (Raster)", 
+        "Vector Data", 
+        "Cloud Platform"
+    ]
 }
-selected_tab = st.sidebar.radio("Select Category", list(sheet_options.keys()))
+df = pd.DataFrame(data)
+st.dataframe(df, use_container_width=True)
 
-# ----- Load selected data -----
-df = load_data(sheet_options[selected_tab])
+# ---------- Submission Form ---------- #
+st.subheader("📤 Suggest a New Resource")
 
-# ----- Sidebar Filters -----
-search_term = st.sidebar.text_input("🔍 Search")
-if search_term:
-    df = df[df.apply(lambda row: row.astype(str).str.contains(search_term, case=False).any(), axis=1)]
+with st.form("submission_form"):
+    name = st.text_input("Resource Name")
+    link = st.text_input("Resource Link")
+    res_type = st.selectbox(
+        "Resource Type", 
+        ["Satellite Imagery", "Tabular Data", "Vector Data", "Platform", "Other"]
+    )
+    submit = st.form_submit_button("Submit")
 
-if selected_tab == "Data Sources":
-    type_filter = st.sidebar.multiselect("📂 Filter by Type", df["Type"].dropna().unique())
-    if type_filter:
-        df = df[df["Type"].isin(type_filter)]
+    if submit:
+        st.success(f"✅ Thank you for suggesting: {name}")
 
-# ----- Sidebar Support Section -----
-st.sidebar.markdown("---")
-st.sidebar.markdown("💰 **Support the GeoAI Repository**")
-st.sidebar.markdown("If you find this helpful, consider supporting the project!")
-st.sidebar.markdown("**📧 UPI ID:** `yourupi@upi`")
-st.sidebar.markdown("[📲 Pay via UPI](upi://pay?pa=yourupi@upi&pn=YourName)", unsafe_allow_html=True)
-st.sidebar.image("images/your_upi_qr.png", caption="Scan to Pay via UPI", use_column_width=True)
+# ---------- UPI Support (Sidebar) ---------- #
+st.sidebar.header("🙏 Support the GeoAI Repository")
+st.sidebar.markdown("""
+If this platform has helped you, consider supporting us.  
+Every small contribution helps in maintaining and expanding the repository!
 
-# ----- About Section -----
-with st.expander("ℹ️ About the GeoAI Repository", expanded=True):
-    st.markdown("""
-    The **GeoAI Repository** is a curated, open-access platform designed to support researchers, students, professionals, and enthusiasts working at the intersection of **Geospatial Technologies** and **Artificial Intelligence (AI)**.
+📌 **UPI ID:** `your-upi-id@upi`  
+Or scan the QR code below:
+""")
 
-    ### 🚀 What You’ll Find Here
+try:
+    st.sidebar.image("images/your_upi_qr.png", caption="Scan to Pay via UPI", use_container_width=True)
+except Exception as e:
+    st.sidebar.warning("⚠️ QR Code image not found. Please ensure 'images/your_upi_qr.png' exists.")
 
-    - ✅ High-quality **open geospatial datasets**  
-    - 🛠️ AI-powered and geospatial **tools and platforms**  
-    - 📚 Free **tutorials**, **courses**, and **sample code** (e.g., in Google Earth Engine, Python)  
-    - 🔎 A searchable and categorized **resource hub** to save your time and accelerate your work  
-
-    Whether you're building urban analytics tools, mapping climate impacts, monitoring biodiversity, or exploring satellite imagery, this repository is built to empower your journey with **practical and trustworthy GeoAI resources**.
-
-    ### 🙌 Why Support This Project?
-
-    This repository is a passion-driven, community-centered initiative — maintained without external funding.
-
-    If you find this resource useful, your support will help us:
-
-    - Continuously add and validate new tools, datasets, and examples  
-    - Improve usability and structure of the platform  
-    - Keep the repository **free and open to all**
-
-    ---  
-    **📧 UPI ID**: `yourupi@upi`  
-    [📲 Click here to contribute via UPI](upi://pay?pa=yourupi@upi&pn=YourName)  
-    _or scan the QR code on the left sidebar_
-    """)
-
-# ----- Main Title -----
-st.title(f"🌍 GeoAI Repository – {selected_tab}")
-
-# ----- Display Data -----
-for idx, row in df.iterrows():
-    title = row.get("Data Source") or row.get("Tools") or row.get("Title") or row.get("Tutorials") or "Unnamed"
-    st.subheader(f"🔹 {title}")
-
-    # Description
-    if "Description" in row and pd.notna(row["Description"]):
-        st.write(row["Description"])
-
-    # Link
-    link = row.get("Links") or row.get("Link") or row.get("Link to the codes")
-    if pd.notna(link):
-        st.markdown(f"[🔗 Access Link]({link})", unsafe_allow_html=True)
-
-    # Tab-specific metadata
-    if selected_tab == "Data Sources":
-        if "Type" in row and pd.notna(row["Type"]):
-            st.markdown(f"**📂 Type:** {row['Type']}")
-        if "Spatial Resolution" in row and pd.notna(row["Spatial Resolution"]):
-            st.markdown(f"**📏 Spatial Resolution:** {row['Spatial Resolution']}")
-        if "Version" in row and pd.notna(row["Version"]):
-            st.markdown(f"**🧾 Version:** {row['Version']}")
-        if "Year/Month of Data Availability" in row and pd.notna(row["Year/Month of Data Availability"]):
-            st.markdown(f"**📅 Year/Month:** {row['Year/Month of Data Availability']}")
-
-    elif selected_tab == "Tools":
-        if "Applicability" in row and pd.notna(row["Applicability"]):
-            st.markdown(f"**🛠️ Applicability:** {row['Applicability']}")
-        if "Type" in row and pd.notna(row["Type"]):
-            st.markdown(f"**📂 Type:** {row['Type']}")
-        if "Datasets Availability" in row and pd.notna(row["Datasets Availability"]):
-            st.markdown(f"**📊 Datasets Availability:** {row['Datasets Availability']}")
-
-    # Common field
-    if "Purpose" in row and pd.notna(row["Purpose"]):
-        st.markdown(f"**🎯 Purpose:** {row['Purpose']}")
-
-    st.markdown("---")
+# ---------- Footer ---------- #
+st.markdown("---")
+st.markdown("© 2025 **GeoAI Repository** | Built with ❤️ using [Streamlit](https://streamlit.io)")
