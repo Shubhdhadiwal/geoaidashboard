@@ -16,7 +16,7 @@ def load_data(sheet_name):
 # ----- Sidebar Navigation ----- #
 st.sidebar.header("🧭 GeoAI Repository")
 
-# Custom tab order
+# Custom tab order (Support this Project removed)
 sheet_options = {
     "About": "About",
     "Data Sources": "Data Sources",
