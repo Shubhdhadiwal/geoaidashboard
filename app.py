@@ -8,15 +8,14 @@ st.set_page_config(page_title="GeoAI Repository", layout="wide")
 @st.cache_data
 def load_data(sheet_name):
     df = pd.read_excel("Geospatial Data Repository (1).xlsx", sheet_name=sheet_name)
-    df.columns = df.iloc[0]  # First row as header
+    df.columns = df.iloc[0]  # Set first row as header
     df = df[1:]  # Skip header row
-    df = df.dropna(subset=[df.columns[0]])  # Drop empty first-column rows
+    df = df.dropna(subset=[df.columns[0]])  # Drop rows with empty first column
     return df
 
 # ----- Sidebar Navigation ----- #
 st.sidebar.header("🧭 GeoAI Repository")
 
-# Tab options
 sheet_options = {
     "About": "About",
     "Data Sources": "Data Sources",
@@ -28,7 +27,7 @@ sheet_options = {
 }
 selected_tab = st.sidebar.radio("Select Section", list(sheet_options.keys()))
 
-# ----- Footer in Sidebar ----- #
+# ----- Sidebar Footer ----- #
 st.sidebar.markdown("---")
 st.sidebar.markdown(
     """
@@ -111,11 +110,11 @@ if selected_tab == "Data Sources" and "Type" in df.columns:
 # ========================= #
 st.title(f"🌍 GeoAI Repository – {selected_tab}")
 
-# Show table in a scrollable container
+# Show table in a scrollable container (fixed deprecated parameter)
 st.dataframe(df, use_container_width=True)
 
 # ----- Detailed View ----- #
-for idx, row in df.iterrows():
+for _, row in df.iterrows():
     title = row.get("Data Source") or row.get("Tools") or row.get("Title") or row.get("Tutorials") or "Unnamed Resource"
     st.subheader(f"🔹 {title}")
 
