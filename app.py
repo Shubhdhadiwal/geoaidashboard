@@ -39,7 +39,12 @@ st.sidebar.markdown("🙏 Thank you for your support!")
 
 # ----- Footer (Sidebar) ----- #
 st.sidebar.markdown("---")
-st.sidebar.markdown("© 2025 GeoAI Repository  \Created by [Shubh Dhadiwal](mailto:dhadiwalshubh348@gmail.com)")
+st.sidebar.markdown(
+    """
+    © 2025 GeoAI Repository  
+    **Created by:** [Shubh Dhadiwal](mailto:dhadiwalshubh348@gmail.com)
+    """
+)
 
 # ========================= #
 #       ABOUT SECTION       #
@@ -160,4 +165,9 @@ for idx, row in df.iterrows():
 #           FOOTER          #
 # ========================= #
 st.markdown("<hr style='border:1px solid #ddd'/>", unsafe_allow_html=True)
-st.markdown("📘 Powered by [Streamlit](https://streamlit.io) | © 2025 GeoAI Repository")
+st.markdown(
+    """
+    📘 Powered by [Streamlit](https://streamlit.io) | © 2025 GeoAI Repository  
+    **Created by:** [Shubh Dhadiwal](mailto:dhadiwalshubh348@gmail.com)
+    """
+)
