@@ -8,15 +8,15 @@ st.set_page_config(page_title="GeoAI Repository", layout="wide")
 @st.cache_data
 def load_data(sheet_name):
     df = pd.read_excel("Geospatial Data Repository (1).xlsx", sheet_name=sheet_name)
-    df.columns = df.iloc[0]  # Set first row as header
+    df.columns = df.iloc[0]  # First row as header
     df = df[1:]  # Skip header row
-    df = df.dropna(subset=[df.columns[0]])  # Drop rows with empty first column
+    df = df.dropna(subset=[df.columns[0]])  # Drop empty first-column rows
     return df
 
 # ----- Sidebar Navigation ----- #
 st.sidebar.header("🧭 GeoAI Repository")
 
-# Custom tab order
+# Tab options
 sheet_options = {
     "About": "About",
     "Data Sources": "Data Sources",
@@ -28,7 +28,7 @@ sheet_options = {
 }
 selected_tab = st.sidebar.radio("Select Section", list(sheet_options.keys()))
 
-# ----- Footer (Sidebar) ----- #
+# ----- Footer in Sidebar ----- #
 st.sidebar.markdown("---")
 st.sidebar.markdown(
     """
@@ -77,7 +77,7 @@ if selected_tab == "Submit New Resource":
         title = st.text_input("📌 Title")
         description = st.text_area("📝 Description")
         link = st.text_input("🔗 Link")
-        category = st.selectbox("📁 Category", list(sheet_options.keys())[1:-1])  # Skip About & Submit
+        category = st.selectbox("📁 Category", list(sheet_options.keys())[1:-1])
         resource_type = st.text_input("📂 Type (e.g. Satellite, Tool, Course)")
         purpose = st.text_input("🎯 Purpose or Use Case")
 
@@ -95,12 +95,10 @@ if selected_tab == "Submit New Resource":
 # ========================= #
 df = load_data(sheet_options[selected_tab])
 
-# ========================= #
-#      SIDEBAR SEARCH       #
-# ========================= #
+# ----- Search ----- #
 search_term = st.sidebar.text_input("🔍 Search")
 if search_term:
-    df = df[df.apply(lambda row: row.astype(str).str.contains(search_term, case=False).any(), axis=1)]
+    df = df[df.apply(lambda row: row.astype(str).str.contains(search_term, case=False, na=False).any(), axis=1)]
 
 # ----- Filter for "Data Sources" Type ----- #
 if selected_tab == "Data Sources" and "Type" in df.columns:
@@ -113,21 +111,21 @@ if selected_tab == "Data Sources" and "Type" in df.columns:
 # ========================= #
 st.title(f"🌍 GeoAI Repository – {selected_tab}")
 
+# Show table in a scrollable container
+st.dataframe(df, use_container_width=True)
+
+# ----- Detailed View ----- #
 for idx, row in df.iterrows():
-    # Title fallback
     title = row.get("Data Source") or row.get("Tools") or row.get("Title") or row.get("Tutorials") or "Unnamed Resource"
     st.subheader(f"🔹 {title}")
 
-    # Description
     if "Description" in row and pd.notna(row["Description"]):
         st.write(row["Description"])
 
-    # Link fallback
     link = row.get("Links") or row.get("Link") or row.get("Link to the codes")
     if pd.notna(link):
         st.markdown(f"[🔗 Access Resource]({link})", unsafe_allow_html=True)
 
-    # ----- Category-specific Fields ----- #
     if selected_tab == "Data Sources":
         if pd.notna(row.get("Type")):
             st.markdown(f"**📂 Type:** {row['Type']}")
@@ -146,7 +144,6 @@ for idx, row in df.iterrows():
         if pd.notna(row.get("Datasets Availability")):
             st.markdown(f"**📊 Datasets Availability:** {row['Datasets Availability']}")
 
-    # Common Purpose field
     if pd.notna(row.get("Purpose")):
         st.markdown(f"**🎯 Purpose:** {row['Purpose']}")
 
