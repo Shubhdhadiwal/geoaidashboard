@@ -1,4 +1,4 @@
 streamlit
 pandas
 openpyxl
-pip install streamlit-authenticator
+streamlit-authenticator
